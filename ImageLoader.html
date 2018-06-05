@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="ClientGlobalContext.js.aspx" type="text/javascript"></script>
+    <style>
+        img {
+            width: auto;
+            height: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <img src="" alt="Image preview...">
+    <br/>
+    <br/>
+    <input type="file" onchange="previewFile()" accept="image/x-png,image/gif,image/jpeg">
+    <script>
+        function previewFile() {
+            // debugger;
+            
+            //Change this to your attribute name
+            var multiLineAttribute = "sid_image";
+
+            if (parent.Xrm && parent.Xrm.Page && parent.Xrm.Page.getAttribute(multiLineAttribute)) {
+
+                var imageAttribute = parent.Xrm.Page.getAttribute(multiLineAttribute);
+                if (imageAttribute) {
+                    // debugger;
+                    var preview = document.querySelector('img');
+                    var file = document.querySelector('input[type=file]').files[0];
+                    var reader = new FileReader();
+
+                    reader.addEventListener("load", function () {
+                        imageAttribute.setValue(reader.result);
+                        preview.src = reader.result;
+                    }, false);
+
+                    if (file) {
+                        reader.readAsDataURL(file);
+                    }
+
+                    if (imageAttribute.getValue()) {
+                        preview.src = imageAttribute.getValue();
+                    }
+                }
+
+            }
+        }
+
+        //Invoke the function on load
+        previewFile();
+    </script>
+
+</body>
+
+</html>
